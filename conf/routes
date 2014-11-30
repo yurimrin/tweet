@@ -1,0 +1,12 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.list(page: Int = 0)
+GET     /list                       controllers.Application.list(page: Int)
+POST    /tweet                      controllers.Application.tweet(page: Int)
+GET     /deletetweet                controllers.Application.deleteTweet(page: Int, id: Int)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

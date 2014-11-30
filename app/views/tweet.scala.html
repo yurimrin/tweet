@@ -1,0 +1,63 @@
+@(tweetForm: Form[String], tweets: List[Tweet], page: Int, hasNextPage: Boolean, hasPrevPage: Boolean)
+
+@import helper.form
+@import views.helper.DateFormatter
+
+@main("Tweet") {
+
+<div class="row">
+    <div class="span3">
+        @form(routes.Application.tweet(page)) {
+            <div class="input">
+                <textarea id="content" name="content"></textarea>
+                @if(tweetForm.error("content")){
+                <div>@tweetForm.error("content").map(_.message).getOrElse("Ok")</div>
+                }
+            </div>
+            <div>
+                <input type="submit"
+                       class="btn btn-primary" value="送信" />
+            </div>
+            @if(tweetForm.errors){
+            <div>入力内容に誤りがあります。</div>
+            }
+        }
+    </div>
+    <div class="span9">
+        @for(tweet <- tweets) {
+            <div class="tweet">
+                <div class="created" style="width: 100px;float:left;">@DateFormatter.format(tweet.createdTime, "MM/dd HH:mm")</div>
+                <div class="content" style="width: 300px;float:left;">@tweet.content</div>
+                <a href="deletetweet?page=@page&id=@tweet.id">削除</a>
+            </div>
+        }
+
+        <div class="page">
+        @if(hasNextPage && hasPrevPage) {
+            <div class="pageTransit">
+                <a href="list?page=@(page+1)">次へ</a>
+            </div>
+            <div class="pageTransit">
+            ／
+            </div>
+            <div class="pageTransit">
+                <a href="list?page=@(page-1)">前へ</a>
+            </div>
+        }
+        @if(hasNextPage && !hasPrevPage) {
+            <div class="pageTransit">
+                <a href="list?page=@(page+1)">次へ</a>
+            </div>
+        }
+        @if(!hasNextPage && hasPrevPage) {
+            <div class="pageTransit">&nbsp;</div>
+            <div class="pageTransit">&nbsp;</div>
+            <div class="pageTransit">
+                <a href="list?page=@(page-1)">前へ</a>
+            </div>
+        }
+        </div>
+    </div>
+
+</div>
+}
